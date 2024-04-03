@@ -1,113 +1,87 @@
+'use client'
 import Image from "next/image";
+import React, { useState } from 'react';
 
 export default function Home() {
+
+  const [cards, setCards] = useState([
+    { id: 1, isFlipped: false },
+    { id: 2, isFlipped: false },
+    { id: 3, isFlipped: false },
+    { id: 4, isFlipped: false },
+    // 可以继续添加更多卡牌对象
+  ]);
+
+  const handleFlip = (id) => {
+    setCards(cards.map(card => {
+      if (card.id === id) {
+        return { ...card, isFlipped: !card.isFlipped };
+      }
+      return card;
+    }))
+  };
+
+
+  // 定义拖拽开始时的处理函数
+  function dragStart(event) {
+    event.dataTransfer.setData("text", event.currentTarget.id);
+    console.log(event.currentTarget.id);
+  }
+
+  // 定义允许放置的处理函数
+  function allowDrop(event) {
+    event.preventDefault();
+  }
+
+  // 定义放置时的处理函数
+  function drop(event) {
+    event.preventDefault();
+    const cardId = event.dataTransfer.getData("text");
+    const card = document.getElementById(cardId);
+    if (card) {
+      const container = event.target;
+      container.appendChild(card);
+    } else {
+        console.error("Element not found:", cardId);
+    }
+  }
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.js</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <main className="grid p-10">
+     
+<div className="flex flex-col gap-6">
+  <div className="grid grid-cols-3 gap-6">
+    <div className="w-full shadow-md text-black" >
+      <p className="text-center font-bold text-white">100% 区域</p>
+    </div>
+    <div className="w-full shadow-md">
+      <p className="text-center font-bold text-white">70% 区域</p>
+    </div>
+    <div className="w-full shadow-md">
+      <p className="text-center font-bold text-white">50% 区域</p>
+    </div>
+  </div>
+  <div className="grid grid-cols-3 gap-6">
+    <div id="100percent" onDragOver={allowDrop} onDrop={drop} className="w-full bg-white p-6 shadow-md" >
+    </div>
+    <div  id="70percent" onDragOver={allowDrop} onDrop={drop} className="w-full bg-white p-6 shadow-md">
+    </div>
+    <div id="50percent" onDragOver={allowDrop} onDrop={drop}  className="w-full bg-white p-6 shadow-md">
+    </div>
+  </div>
+  <div className="container border bg-card">
+  {cards.map(card => (
+      <div id={`card${card.id}`} key={card.id} className={`card-container w-64 rounded-lg border bg-card shadow-lg overflow-hidden ${card.isFlipped ? 'flipped' : ''}`} draggable="true" onDragStart={dragStart}  onClick={() => handleFlip(card.id)}>
+        <div className="card-face front">
+          <Image src={`/card/card${card.id}.png`} alt={`卡牌${card.id}`} fill/>
+        </div>
+        <div className="card-face back">
+          <Image src={`/card/card${card.id}-back.png`} alt={`反面${card.id}`} fill/>
         </div>
       </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+  ))}
+  </div>
+</div>
     </main>
   );
 }
