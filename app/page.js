@@ -95,7 +95,7 @@ export default function Home() {
     </div>
   </div>
   <div className="grid grid-cols-3 gap-6 py-3">
-    <div id="100percent" onDragOver={allowDrop} onDrop={drop} className="card-drop rounded-md w-full bg-white p-6 shadow-md grid grid-cols-2 auto-rows-max gap-2 drop-zone" >
+    <div id="100percent" onDragOver={allowDrop} onDrop={drop} className="card-drop rounded-md w-full bg-white p-6 shadow-md grid grid-cols-2auto-rows-max gap-2 drop-zone" >
       {!hasImage100 && <p>正面100%是你的牌放这</p>}
     </div>
     <div  id="70percent" onDragOver={allowDrop} onDrop={drop} className="card-drop rounded-md w-full bg-white p-6 shadow-md grid grid-cols-2 auto-rows-max gap-2 drop-zone">
