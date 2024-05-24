@@ -95,20 +95,20 @@ export default function Home() {
     </div>
   </div>
   <div className="grid grid-cols-3 gap-6 py-3">
-    <div id="100percent" onDragOver={allowDrop} onDrop={drop} className="card-drop rounded-md w-full bg-white p-6 shadow-md grid grid-cols-2 gap-2 drop-zone" >
+    <div id="100percent" onDragOver={allowDrop} onDrop={drop} className="card-drop rounded-md w-full bg-white p-6 shadow-md grid grid-cols-2 auto-rows-max gap-2 drop-zone" >
       {!hasImage100 && <p>正面100%是你的牌放这</p>}
     </div>
-    <div  id="70percent" onDragOver={allowDrop} onDrop={drop} className="card-drop rounded-md w-full bg-white p-6 shadow-md grid grid-cols-2 gap-2 drop-zone">
+    <div  id="70percent" onDragOver={allowDrop} onDrop={drop} className="card-drop rounded-md w-full bg-white p-6 shadow-md grid grid-cols-2 auto-rows-max gap-2 drop-zone">
      {!hasImage70 && <p>正面70%是你的牌放这</p>}
     </div>
-    <div id="50percent" onDragOver={allowDrop} onDrop={drop}  className="card-drop rounded-md w-full bg-white p-6 shadow-md grid grid-cols-2 gap-2 drop-zone">
+    <div id="50percent" onDragOver={allowDrop} onDrop={drop}  className="card-drop rounded-md w-full bg-white p-6 shadow-md grid grid-cols-2 auto-rows-max gap-2 drop-zone">
       {!hasImage50 && <p>两面各占一半的牌放这</p>}
     </div>
   </div>
   <p className="text-center text-red-500 py-3">点击图片支持翻转，拖拽图片至上方三个白色区域</p>
   <div id="card-contaner" className="container bg-card">
   {cards.map(card => (
-      <div id={`card${card.id}`} key={card.id} className={`card-container w-64 rounded-lg border bg-card shadow-lg overflow-hidden ${card.isFlipped ? 'flipped' : ''}`} draggable="true" onDragStart={dragStart}  onClick={() => handleFlip(card.id)}>
+      <div id={`card${card.id}`} key={card.id} className={`card-container w-64 h-64 rounded-lg border bg-card shadow-lg overflow-hidden ${card.isFlipped ? 'flipped' : ''}`} draggable="true" onDragStart={dragStart}  onClick={() => handleFlip(card.id)}>
         <div className="card-face front">
           <Image src={`/card/card${card.id}.jpg`} alt={`卡牌${card.id}`} fill/>
         </div>
